@@ -2,23 +2,25 @@ package main
 
 import (
 	"fmt"
+	"html/template"
 	"net/http"
 )
 
-type user struct {
-	name string
-	age uint16
-	balance int64
+type User struct {
+	Name string
+	Age uint16
+	Balance int64
 }
 
-func (u *user) getUserInfo() string {
-	return fmt.Sprintf("User name is: %s. He is %d and he has %d$.", u.name, u.age, u.balance)
+func (u *User) getUserInfo() string {
+	return fmt.Sprintf("User name is: %s. He is %d and he has %d$.", u.Name, u.Age, u.Balance)
 }
 
 func mainPage(w http.ResponseWriter, req *http.Request) {
-	testUser := user{name: "Oleg", age: 26, balance: 10000}
+	testUser := User{Name: "Oleg", Age: 26, Balance: 10000}
 
-	fmt.Fprintf(w, testUser.getUserInfo())
+	tmpl, _ := template.ParseFiles("templates/mainPage.html")
+	tmpl.Execute(w, testUser)
 }
 
 func aboutPage(w http.ResponseWriter, req *http.Request) {
